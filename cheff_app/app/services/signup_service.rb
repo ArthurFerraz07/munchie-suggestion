@@ -41,6 +41,7 @@ class SignupService < ApplicationService
   def validate_email
     raise SignupException, 'Email is blank' if email.blank?
     raise SignupException, 'Email is invalid' unless email.match?(EMAIL_REGEXP)
+    raise SignupException, 'Email already exists' if Identity.exists?(login: email)
   end
 
   def validate_password

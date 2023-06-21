@@ -30,7 +30,7 @@ RSpec.describe SignupService, type: :service do
         expect(response.error).to eq('Email is blank')
       end
 
-      it 'is expected to have created the identity' do
+      it 'is expected to not have created the identity' do
         response
         expect(Identity.find_by_login(email)).to be_blank
       end
@@ -45,9 +45,23 @@ RSpec.describe SignupService, type: :service do
         expect(response.error).to eq('Email is invalid')
       end
 
-      it 'is expected to have created the identity' do
+      it 'is expected to not have created the identity' do
         response
         expect(Identity.find_by_login(email)).to be_blank
+      end
+    end
+
+    context 'when email already existis' do
+      let(:email) { 'already_registered@email.com' }
+      let(:password) { '!@#123QWEqwe' }
+
+      before do
+        create(:identity, login: email)
+      end
+
+      it 'is expected to have the correct response' do
+        expect(response.success).to be_falsey
+        expect(response.error).to eq('Email already exists')
       end
     end
 
@@ -60,7 +74,7 @@ RSpec.describe SignupService, type: :service do
         expect(response.error).to eq('Password is blank')
       end
 
-      it 'is expected to have created the identity' do
+      it 'is expected to not have created the identity' do
         response
         expect(Identity.find_by_login(email)).to be_blank
       end
@@ -75,7 +89,7 @@ RSpec.describe SignupService, type: :service do
         expect(response.error).to eq('Password is invalid')
       end
 
-      it 'is expected to have created the identity' do
+      it 'is expected to not have created the identity' do
         response
         expect(Identity.find_by_login(email)).to be_blank
       end

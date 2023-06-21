@@ -10,7 +10,7 @@ class ApplicationService
   end
 
   def initialize
-    raise NotImplementedError
+    raise StaticClassException
   end
 
   private
