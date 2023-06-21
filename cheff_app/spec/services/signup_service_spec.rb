@@ -21,12 +21,64 @@ RSpec.describe SignupService, type: :service do
       end
     end
 
-    context 'when email is missing'
+    context 'when email is missing' do
+      let(:email) { nil }
+      let(:password) { '!@#123QWEqwe' }
 
-    context 'when email is invalid'
+      it 'is expected to have the correct response' do
+        expect(response.success).to be_falsey
+        expect(response.error).to eq('Email is blank')
+      end
 
-    context 'when password is missing'
+      it 'is expected to have created the identity' do
+        response
+        expect(Identity.find_by_login(email)).to be_blank
+      end
+    end
 
-    context 'when password is invalid'
+    context 'when email is invalid' do
+      let(:email) { 'invalid_email' }
+      let(:password) { '!@#123QWEqwe' }
+
+      it 'is expected to have the correct response' do
+        expect(response.success).to be_falsey
+        expect(response.error).to eq('Email is invalid')
+      end
+
+      it 'is expected to have created the identity' do
+        response
+        expect(Identity.find_by_login(email)).to be_blank
+      end
+    end
+
+    context 'when password is missing' do
+      let(:email) { 'login@email.com' }
+      let(:password) { nil }
+
+      it 'is expected to have the correct response' do
+        expect(response.success).to be_falsey
+        expect(response.error).to eq('Password is blank')
+      end
+
+      it 'is expected to have created the identity' do
+        response
+        expect(Identity.find_by_login(email)).to be_blank
+      end
+    end
+
+    context 'when password is invalid' do
+      let(:email) { 'login@email.com' }
+      let(:password) { 'invalid pass' }
+
+      it 'is expected to have the correct response' do
+        expect(response.success).to be_falsey
+        expect(response.error).to eq('Password is invalid')
+      end
+
+      it 'is expected to have created the identity' do
+        response
+        expect(Identity.find_by_login(email)).to be_blank
+      end
+    end
   end
 end
