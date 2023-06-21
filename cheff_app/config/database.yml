@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: user
+  password: password
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DB_HOST") { 'cheff_database' } %>
+  port: <%= ENV.fetch("DB_PORT") { 5432 } %>
+
+development:
+  cheff_app:
+    <<: *default
+    database: cheff_development
+
+test:
+  cheff_app:
+    <<: *default
+    database: cheff_test
+
+production:
+  cheff_app:
+    <<: *default
+    database: cheff_production

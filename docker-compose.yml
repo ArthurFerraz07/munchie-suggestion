@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  cheff_database:
+    image: postgres:15.3
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - cheff_database:/var/lib/postgresql/data
+
+  cheff_app:
+    build:
+      context: .
+      dockerfile: cheff_app/Dockerfile
+    command: bundle exec rails s -p 3001 -b '0.0.0.0'
+    ports:
+      - "3001:3001"
+    depends_on:
+      - cheff_database
+    environment:
+      APP_NAME: cheff_app
+      DB_HOST: cheff_database
+      DB_PORT: 5432
+      IDENTITY_AUTH_SECRET: secret
+      IDENTITY_AUTH_ALGORITHM: HS256
+      IDENTITY_AUTH_EXPIRATION: 3600
+    volumes:
+      - ./cheff_app:/cheff_app
+      
+volumes:
+  cheff_database:
+  cheff_app:
