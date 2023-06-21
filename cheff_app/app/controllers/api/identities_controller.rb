@@ -5,7 +5,7 @@ module Api
     def signup
       service_response = SignupService.new(signup_params[:email], signup_params[:password]).call
       if service_response.success
-        return_response(data: ApplicationSerializer.new(service_response.data).serialize)
+        return_response(data: IdentitySerializer.new(service_response.data).serialize)
       else
         return_response(status: :bad_request, data: service_response.error)
       end
